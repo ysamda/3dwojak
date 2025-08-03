@@ -46,6 +46,10 @@ body {
 }
 
 .video-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
     display: block;
     position: relative;
     width: 100%;
@@ -56,12 +60,18 @@ body {
 }
 
 .video-container iframe {
+    display: block;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
 }
+video{
+    display: block;
+    margin: 0 auto;
+}
+
 
 
 
