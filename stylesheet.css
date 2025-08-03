@@ -42,6 +42,7 @@ body {
 }
 
 .video-container{
+    display:block;
     position:relative;
     width:100%;
     max-width:  600px;
@@ -56,4 +57,5 @@ body {
     width:100%;
     height:100%;
 }
+
 
