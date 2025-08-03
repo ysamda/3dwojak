@@ -1,4 +1,12 @@
-body {
+body.home{
+   background: #f4f4f4;
+    font-family: sans-serif;
+    text-align: center;
+     display: block;
+      min-height: auto;
+}
+
+body.about {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -7,6 +15,7 @@ body {
     font-family: sans-serif;
     text-align: center;
 }
+
 
 .gallery {
     display: flex;
@@ -71,6 +80,7 @@ video{
     display: block;
     margin: 0 auto;
 }
+
 
 
 
