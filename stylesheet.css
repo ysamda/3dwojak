@@ -85,15 +85,25 @@ body.generator {
     text-align: center;
     margin: 20px;
 }
-.generator .controls >*{
+.generator .controls  > * {
     margin:10px;
 
 }
-.canvas-wrapper{
+.generate .canvas-wrapper{
     display:inline-block;
     margin-top: 20px;
     border: 2px solid #333;
 }
+
+@media (max-width: 500px){
+
+ .generator .controls{
+ display: flex ;
+ flex-direction: colum;
+ align-items: center;
+ }
+}
+
 
 
 
