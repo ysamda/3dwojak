@@ -80,6 +80,20 @@ video{
     display: block;
     margin: 0 auto;
 }
+body.generator {
+    font-family: sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+.generator .controls >*{
+    margin:10px;
+
+}
+.canvas-wrapper{
+    display:inline-block;
+    margin-top: 20px;
+    border: 2px solid #333;
+}
 
 
 
