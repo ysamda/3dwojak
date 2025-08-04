@@ -5,6 +5,11 @@ const topIn    = document.getElementById('topText');
 const botIn    = document.getElementById('bottomText');
 const genBtn   = document.getElementById('generateBtn');
 const dlBtn    = document.getElementById('downloadBtn');
+const container = canvas.parentElement;
+const availableWidth = container.clientWidth || 500;
+const maxHeight = 500;
+let cw = maxWidth;
+let ch = cw/ aspect;
 
 function fitText(text, maxWidth){
     let fontSize = 40;
@@ -39,9 +44,11 @@ function drawMeme() {
     img.src = `images/${charSel.value}`;
     img.onload = () => {
         // 1) Compute & set canvas size to preserve aspect ratio
-        const aspect = img.width / img.height;
-        const maxWidth = 500;
+       const container = canvas.parentElement;
+        const maxWidth = container.clientWidth || 500;
         const maxHeight = 500;
+        const aspect = img.width / img.height;
+        
         let cw = maxWidth;
         let ch = cw / aspect;
         if (ch > maxHeight) {
@@ -109,4 +116,5 @@ function drawMeme() {
 
     });
     
+
 
