@@ -89,12 +89,20 @@ body.generator {
     margin:10px;
 
 }
-.generate .canvas-wrapper{
-    display:inline-block;
-    margin-top: 20px;
+.generator .canvas-wrapper{
+    display: inline-block;
+    width: 100%;
+    max-width: 500px;
+    margin: 20px auto;
     border: 2px solid #333;
 }
+.generator .canvas-wrapper canvas {
+    width: 100% !important;
+    height: auto !important;
+    display: block;
 
+
+}
 @media (max-width: 500px){
 
  .generator .controls{
@@ -103,6 +111,7 @@ body.generator {
  align-items: center;
  }
 }
+
 
 
 
