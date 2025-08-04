@@ -85,8 +85,18 @@ body.generator {
     text-align: center;
     margin: 20px;
 }
-.generator .controls  > * {
-    margin:10px;
+.generator .controls{
+ display: flex;  
+ flex-wrap: wrap;
+ justify-content: center;
+ gap:10px;
+ margin-bottom: 10px;
+}
+
+.generator .controls > * {
+    
+    flex: 1 1 auto;
+    min-width: 80px;
 
 }
 .generator .canvas-wrapper{
@@ -103,14 +113,23 @@ body.generator {
 
 
 }
-@media (max-width: 500px){
 
- .generator .controls{
- display: flex ;
- flex-direction: colum;
- align-items: center;
- }
+
+    
+
+
+@media (max-width: 500px){
+    .generator .controls{
+        flex-direction: column;
+        align-items: stretch;
+        gap: 5px;}
+   .generator .controls > * {
+    width: 100%;
+    max-width: none;
 }
+
+}
+
 
 
 
