@@ -5,11 +5,7 @@ const topIn    = document.getElementById('topText');
 const botIn    = document.getElementById('bottomText');
 const genBtn   = document.getElementById('generateBtn');
 const dlBtn    = document.getElementById('downloadBtn');
-const container = canvas.parentElement;
-const availableWidth = container.clientWidth || 500;
-const maxHeight = 500;
-let cw = maxWidth;
-let ch = cw/ aspect;
+
 
 function fitText(text, maxWidth){
     let fontSize = 40;
@@ -116,5 +112,6 @@ function drawMeme() {
 
     });
     
+
 
 
