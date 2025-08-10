@@ -146,7 +146,7 @@ body.generator {
 @media(max-width:600px) {
     .wojak-card {flex-direction: column; align-items: center; text-align: center;}
     .wojak-img {width: 60%; max-width: 260px; flex: 0 0 auto;}
-    .wojak-card  figcaption p {tetxt-align:left}
+    .wojak-card  figcaption p {text-align:left}
 }
 
 .zoomer-card{
@@ -177,10 +177,12 @@ body.generator {
 .zoomer-card .credit {font-size: 0.85rem; color: #666;}
 
 @media(max-width:600px) {
-    .zoomercard {flex-direction: column; align-items: center; text-align: center;}
+    .zoomer-card {flex-direction: column; align-items: center; text-align: center;}
     .zoomer-img {width: 60%; max-width: 260px; flex: 0 0 auto;}
-    .zoomer-card  figcaption p {tetxt-align:left}
+    .zoomer-card  figcaption p {text-align:left}
 }
+
+
 
 
 
@@ -202,6 +204,7 @@ body.generator {
 }
 
 }
+
 
 
 
