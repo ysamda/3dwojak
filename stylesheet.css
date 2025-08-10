@@ -114,6 +114,29 @@ body.generator {
 
 }
 
+#examples {
+    margin: 40px 0 ;
+    text-align: center;
+}
+
+.meme-gallery {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+
+}
+
+.meme-item {
+    width: 250px;
+}
+
+.meme-item img{
+    width: 100px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
 
 
 .wojak-card{
@@ -204,6 +227,7 @@ body.generator {
 }
 
 }
+
 
 
 
