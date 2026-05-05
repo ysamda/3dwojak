@@ -97,7 +97,7 @@
     }
 
     input[type="text"], textarea {
-        background: var(--big);
+        background: var(--bg);
         border: 1px solid var(--border);
         color: var(--text);
         font-family: 'Share Tech Mono', monospace;
@@ -473,7 +473,7 @@
   async function uploadImage(file) {
     const ext = file.name.split('.').pop()
     const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
-    const {data, error} = await db.storage.from('images').getPublicUrl(filename)
+    const {data, error} = await db.storage.from('images').upload(filename, file)
     if (error) throw error 
     const { data: urlData } = db.storage.from('images').getPublicUrl(filename)
     return urlData.publicUrl
