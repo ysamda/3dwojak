@@ -1,1 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3Dwojak - /b/</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap"
+    rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        ;root {
+            --bg: #0d0d0d;
+            --surface: #1a1a1a;
+            --border: #2e2e2e;
+            --accent: #d4a017;
+            --accent2: #c0392b;
+            --text: #c8c8c8;
+            --card-bg-color: #111;
+            --card-border-color: #0f0;
 
+        }
+
+        * {
+            box-sizing: border-box; margin: 0; padding: 0;
+        }
+    body{
+
+    background:var(--bg);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    min-height: 100vh;
+    }
+
+    /* Header */
+    header {
+        background: var(--surface);
+        border-bottom: 2px solid var(--accent);
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .logo {
+        font-family: 'VT323', monospace;
+        font-size: 32px;
+        color: var(--accent);
+        letter-spacing: 2px;
+        text-shadow: 0 0 12px var(--accent);
+    }
+    
+    .board-tag {
+        font-family: 'VT323', monospace;
+        font-size: 32px;
+        color: var(--accent2);
+        border: 1px solid var(--accent2);
+        padding: 2px 10px;
+    }
+
+    nav {
+        display: flex;
+        gap: 16px;
+        font-size: 12px;
+        color: var(--muted);
+    }
+
+    nav span { cursor: pointer; }
+    nav span:hover { color: var(--accent); }
+
+    /*layout*/
+    .new-thread-box {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-top: 2px solid var(--accent);
+        padding: 20px;
+        margin-bottom: 28px;
+       
+    }
+
+    .new-thread-box h2 {
+        font-family: 'VT323', monospace;
+        font-size: 22px;
+        color: var(--accent);
+        margin-bottom: 14px;
+        letter-spacing: 1px;
+    }
+
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    input[type="text"], textarea {
+        background: var(--big);
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 13px;
+        padding: 8px 10px;
+        width: 100%;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus, textarea:focus{
+        border-color: var(--accent);
+    }
+
+    textarea {resize: vertical; min-height: 80px; }
+
+    input[type="file"] {
+        color: var(--muted);
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 12px;
+    }
+
+    .btn {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 8px 20px;
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: background 0.15s;
+    }
+
+    .btn:hover { background: #e8b520; }
+    .btn:disabled { background: var(--muted); cursor: not-allowed; }
+
+    /* Thread card */
+    .thread {
+      background: var(--post-bg);
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from {opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0);}
+    }
+
+    thread-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    post-num {
+      color: var(--accent);
+      font-size: 12px;
+    }
+ 
+    .post-title {
+      color: var(--accent);
+      font-weight: bold;
+      font-size: 14px;
+      flex: 1;
+    }
+ 
+    .post-time {
+      color: var(--muted);
+      font-size: 11px;
+    }
+ 
+    .thread-body {
+      display: flex;
+      gap: 14px;
+      padding: 14px;
+    }
+
+    .thread-image img {
+      max-width: 180px;
+      max-height: 180px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      display: block;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .thread-image img:hover {opacity : 0.85; }
+
+    .thread-content {
+      flex: 1;
+      white-space: pre-wrap;
+      line-height: 1.4;
+    }
+
+    .thread-footer {
+      border-top: 1px solid var(--border);
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .reply-count {
+      font-size: 12px;
+      color: var(--muted);
+    }
+ 
+    .toggle-replies {
+      font-size: 12px;
+      color: var(--accent);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .toggle-replies:hover { color: #e8b520; }
+
+    /* Replies */
+    .replies-section {
+      background: #111;
+      border-top: 1px solid var(--border);
+      padding: 10px 14px;
+      display: none;
+    }
+
+    .replies-section.open { display: block; }
+ 
+    .reply {
+      border-left: 2px solid var(--border);
+      padding: 8px 12px;
+      margin-bottom: 10px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .reply:last-child { margin-bottom: 0; }
+ 
+    .reply-image img {
+      max-width: 100px;
+      max-height: 100px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+    }
+
+    .reply-text {
+      flex: 1;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #aaa;
+    }
+ 
+    .reply-time {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* Reply form */
+
+     .reply-form {
+      border-top: 1px solid var(--border);
+      padding: 10px 14px;
+      background: #0f0f0f;
+      display: none;
+    }
+
+    .reply-form.open { display: block; }
+ 
+    .reply-form h4 {
+      color: var(--accent);
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    /* Status messages */
+    .status {
+      padding: 8px 14px;
+      font-size: 12px;
+      margin-bottom: 12px;
+      display: none;
+    }
+    .status.success { background: #1a3a1a; color: var(--green);
+     border-left: 3px solid var(--green); display: block; }
+    .status.error { background: #3a1a1a; color: #e74c3c;
+     border-left: 3px solid #e74c3c; display: block; }
+
+     /* Loading */
+    .loading {
+      text-align: center;
+      color: var(--muted);
+      padding: 40px;
+      font-family: 'VT323', monospace;
+      font-size: 22px;
+      letter-spacing: 2px;
+    }
+
+    .loading::after {
+      content: '...';
+      animation: dots 1.2s steps(3, end) infinite;
+    }
+
+    @keyframes dots {
+      0%, 33% { content: '.'; }
+      34%, 66% { content: '..'; }
+      67%, 100% { content: '...'; }
+    }
+
+    /* No threads */
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 60px 20px;
+      font-family: 'VT323', monospace;
+      font-size: 22px;
+    }
+ 
+    /* Footer */
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 11px;
+      padding: 30px;
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+    }
+
+    /* Image modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+    }
+ 
+    .modal.open { display: flex; }
+    .modal img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      color: #fff;
+      font-size: 30px;
+      cursor: pointer;
+      font-family: 'VT323', monospace;
+    }
+ 
+    @media (max-width: 600px) {
+      .thread-body { flex-direction: column; }
+      .thread-image img { max-width: 100%; }
+    }/* Image modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+    }
+ 
+    .modal.open { display: flex; }
+    .modal img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      color: #fff;
+      font-size: 30px;
+      cursor: pointer;
+      font-family: 'VT323', monospace;
+    }
+ 
+    @media (max-width: 600px) {
+      .thread-body { flex-direction: column; }
+      .thread-image img { max-width: 100%; }
+    }
+    </style>
+</head>
+<body> 
+ <header>
+    <div style = "display: flex;align-items: center;gap: 14px;">
+        <div class ="logo">3Dwojak</div>
+        <div class="board-tag">/b/</div>
+    </div>
+    <nav>
+        <span onclick="scrollTo(0,0)">[top]</span>
+        <span onclick="document.getElementById('new-thread').scrollIntoView()">[post]</span>
+        <span onclick="loadThreads()">[refresh]</span>
+    </nav>
+ </header>   
+<div class="container">
+
+    <!-- Status -->
+     <div id="status" class="status"></div>
+
+     <!-- New Thread Form -->
+      <div class="new-thread-box">
+        <input type="text" id="thread-title" placeholder="Title  (required)" maxlength="100"/>
+      </div>
+      <div class="form-now">
+        <input type="file" id="thread-image" accept="image/*"/>
+      </div>
+      <button class="btn" id="post-btn" onclick="createThread()">POST THREAD</button>
+</div>
+
+ <!-- Threads -->
+  <div id="threads-container">
+    <div class="loading">Loading threads</div>
+  </div>
+ 
+</div>
+ 
+<footer>3dwojak.com — all posts are anonymous — <span style="color:var(--accent)">est. 2025</span></footer>
+ 
+<!-- Image Modal -->
+<div class="modal" id="modal" onclick="closeModal()">
+  <div class="modal-close">✕</div>
+  <img id="modal-img" src="" alt="full image"/>
+</div>
+
+<script>
+
+    // ============================================================
+  // 🔑 PASTE YOUR SUPABASE KEYS HERE
+  // ============================================================
+  const SUPABASE_URL = 'https://ucagrhzsrkmsxpecjfvo.supabase.co'
+  const SUPABASE_KEY = 'sb_publishable_K_VnBYchLxpgY7Jmw3QD5w_7ATKxYdr'
+  // ============================================================
+
+   const { createClient } = supabase
+  const db = createClient(SUPABASE_URL, SUPABASE_KEY)
+
+
+// ---- Helpers ----
+ 
+  function showStatus(msg, type) {
+    const el = document.getElementById('status')
+    el.textContent = msg
+    el.className = 'status ' + type
+    setTimeout(() => { el.className = 'status' }, 4000)
+  }
+ 
+  function timeAgo(ts) {
+    const diff = Math.floor((Date.now() - new Date(ts)) / 1000)
+    if (diff < 60) return diff + 's ago'
+    if (diff < 3600) return Math.floor(diff/60) + 'm ago'
+    if (diff < 86400) return Math.floor(diff/3600) + 'h ago'
+    return Math.floor(diff/86400) + 'd ago'
+  }
+ 
+  function openModal(src) {
+    document.getElementById('modal-img').src = src
+    document.getElementById('modal').classList.add('open')
+  }
+ 
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open')
+  }
+
+  // ---- Upload image to Supabase Storage ----
+
+  async function uploadImage(file) {
+    const ext = file.name.split('.').pop()
+    const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+    const {data, error} = await db.strage.from('images').getPublicUrl(filename)
+    if (error) throw error 
+    const { data: urlData } = db.strage.form('images').getPublicUrl(filename)
+    return urlData.publicUrl
+  }
+
+  // ---- Create Thread ----
+ 
+  async function createThread() {
+    const title = document.getElementById('thread-title').value.trim()
+    const content = document.getElementById('thread-content').value.trim()
+    const imageFile = document.getElementById('thread-image').files[0]
+ 
+    if (!title) { showStatus('Title is required!', 'error'); return; }
+ 
+    const btn = document.getElementById('post-btn')
+    btn.disabled = true
+    btn.textContent = 'POSTING...'
+ 
+    try {
+      let image_url = null
+      if (imageFile) image_url = await uploadImage(imageFile)
+ 
+      const { error } = await db.from('threads').insert({ title, content, image_url })
+      if (error) throw error
+ 
+      document.getElementById('thread-title').value = ''
+      document.getElementById('thread-content').value = ''
+      document.getElementById('thread-image').value = ''
+      showStatus('Thread posted!', 'success')
+      loadThreads()
+    } catch (err) {
+      showStatus('Error: ' + err.message, 'error')
+    } finally {
+      btn.disabled = false
+      btn.textContent = 'POST THREAD'
+    }
+  }
+ 
+  // ---- Create Reply ----
+ 
+  async function createReply(threadId) {
+    const content = document.getElementById(`reply-text-${threadId}`).value.trim()
+    const imageFile = document.getElementById(`reply-image-${threadId}`).files[0]
+ 
+    if (!content && !imageFile) { showStatus('Reply cannot be empty!', 'error'); return; }
+ 
+    const btn = document.getElementById(`reply-btn-${threadId}`)
+    btn.disabled = true
+    btn.textContent = 'POSTING...'
+ 
+    try {
+      let image_url = null
+      if (imageFile) image_url = await uploadImage(imageFile)
+ 
+      const { error } = await db.from('replies').insert({ thread_id: threadId, content, image_url })
+      if (error) throw error
+ 
+      document.getElementById(`reply-text-${threadId}`).value = ''
+      document.getElementById(`reply-image-${threadId}`).value = ''
+      showStatus('Reply posted!', 'success')
+      loadReplies(threadId)
+    } catch (err) {
+      showStatus('Error: ' + err.message, 'error')
+    } finally {
+      btn.disabled = false
+      btn.textContent = 'POST REPLY'
+    }
+  }
+ 
+  // ---- Load Replies for a thread ----
+ 
+  async function loadReplies(threadId) {
+    const { data, error } = await db
+      .from('replies')
+      .select('*')
+      .eq('thread_id', threadId)
+      .order('created_at', { ascending: true })
+ 
+    if (error) return
+ 
+    const container = document.getElementById(`replies-${threadId}`)
+    const countEl = document.getElementById(`reply-count-${threadId}`)
+ 
+    if (countEl) countEl.textContent = `${data.length} repl${data.length === 1 ? 'y' : 'ies'}`
+ 
+    if (!data.length) {
+      container.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:6px 0;">No replies yet.</div>'
+      return
+    }
+ 
+    container.innerHTML = data.map(r => `
+      <div class="reply">
+        ${r.image_url ? `<div class="reply-image"><img src="${r.image_url}" alt="reply image" onclick="openModal('${r.image_url}')"/></div>` : ''}
+        <div>
+          <div class="reply-text">${r.content ? escapeHtml(r.content) : ''}</div>
+          <div class="reply-time">${timeAgo(r.created_at)}</div>
+        </div>
+      </div>
+    `).join('')
+  }
+ 
+  // ---- Toggle replies/reply form ----
+ 
+  function toggleReplies(threadId) {
+    const sec = document.getElementById(`replies-section-${threadId}`)
+    sec.classList.toggle('open')
+    if (sec.classList.contains('open')) loadReplies(threadId)
+  }
+ 
+  function toggleReplyForm(threadId) {
+    const form = document.getElementById(`reply-form-${threadId}`)
+    form.classList.toggle('open')
+  }
+ 
+  // ---- Escape HTML ----
+ 
+  function escapeHtml(text) {
+    return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br/>')
+  }
+ 
+  // ---- Render thread card ----
+ 
+  function renderThread(t, index) {
+    return `
+      <div class="thread" id="thread-${t.id}">
+        <div class="thread-header">
+          <span class="post-num">No.${String(index+1).padStart(4,'0')}</span>
+          <span class="post-title">${escapeHtml(t.title)}</span>
+          <span class="post-time">${timeAgo(t.created_at)}</span>
+        </div>
+        <div class="thread-body">
+          ${t.image_url ? `<div class="thread-image"><img src="${t.image_url}" alt="thread image" onclick="openModal('${t.image_url}')"/></div>` : ''}
+          <div class="thread-content">${t.content ? escapeHtml(t.content) : '<span style="color:var(--muted)">[ no comment ]</span>'}</div>
+        </div>
+        <div class="thread-footer">
+          <span class="reply-count" id="reply-count-${t.id}">0 replies</span>
+          <span class="toggle-replies" onclick="toggleReplies('${t.id}')">[ view replies ]</span>
+          <span class="toggle-replies" onclick="toggleReplyForm('${t.id}')" style="color:var(--accent2)">[ reply ]</span>
+        </div>
+ 
+        <!-- Replies -->
+        <div class="replies-section" id="replies-section-${t.id}">
+          <div id="replies-${t.id}"></div>
+        </div>
+ 
+        <!-- Reply form -->
+        <div class="reply-form" id="reply-form-${t.id}">
+          <h4>// REPLY</h4>
+          <div class="form-row">
+            <textarea id="reply-text-${t.id}" placeholder="Comment" rows="3"></textarea>
+          </div>
+          <div class="form-row">
+            <input type="file" id="reply-image-${t.id}" accept="image/*"/>
+          </div>
+          <button class="btn btn-red" id="reply-btn-${t.id}" onclick="createReply('${t.id}')">POST REPLY</button>
+        </div>
+      </div>
+    `
+  }
+ 
+  // ---- Load all threads ----
+ 
+  async function loadThreads() {
+    const container = document.getElementById('threads-container')
+    container.innerHTML = '<div class="loading">Loading threads</div>'
+ 
+    const { data, error } = await db
+      .from('threads')
+      .select('*')
+      .order('created_at', { ascending: false })
+ 
+    if (error) {
+      container.innerHTML = `<div class="empty">Error loading threads: ${error.message}</div>`
+      return
+    }
+ 
+    if (!data.length) {
+      container.innerHTML = '<div class="empty">No threads yet. Be the first to post!</div>'
+      return
+    }
+ 
+    container.innerHTML = data.map((t, i) => renderThread(t, i)).join('')
+ 
+    // Load reply counts
+    data.forEach(t => loadReplies(t.id))
+  }
+ 
+  // ---- Init ----
+  loadThreads()
+  </script>
+</body>
+</html>
