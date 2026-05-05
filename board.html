@@ -405,13 +405,18 @@
      <div id="status" class="status"></div>
 
      <!-- New Thread Form -->
-      <div class="new-thread-box">
-        <input type="text" id="thread-title" placeholder="Title  (required)" maxlength="100"/>
-      </div>
-      <div class="form-row">
-        <input type="file" id="thread-image" accept="image/*"/>
-      </div>
-      <button class="btn" id="post-btn" onclick="createThread()">POST THREAD</button>
+    <div class="new-thread-box" id="new-thread">
+  <h2>// NEW THREAD</h2>
+  <div class="form-row">
+    <input type="text" id="thread-title" placeholder="Title (required)" maxlength="100"/>
+  </div>
+  <div class="form-row">
+    <textarea id="thread-content" placeholder="Comment (optional)"></textarea>
+  </div>
+  <div class="form-row">
+    <input type="file" id="thread-image" accept="image/*"/>
+  </div>
+  <button class="btn" id="post-btn" onclick="createThread()">POST THREAD</button>
 </div>
 
  <!-- Threads -->
